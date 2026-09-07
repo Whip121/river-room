@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#101b22"><meta name="description" content="河畔牌室：2–10 人德州扑克，统一入场筹码，可补筹、添加不同难度电脑，分享房间邀请朋友。"><title>河畔牌室 · River Room</title><style>:root{color-scheme:dark;--bg:#10191f;--panel:#18252d;--panel2:#1e3038;--line:#31444b;--ink:#f1f5f1;--muted:#a2b5ba;--mint:#bcedcd;--gold:#efd69b;--danger:#ffb3ac;--radius:18px;font-family:Inter,"Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:16px;font-synthesis:none}
+.net{font-size:12px;font-weight:700;margin-top:3px}.win{color:#9de2b5}.loss{color:#ffaaa3}.warning-note{margin-top:5px;padding:4px 6px;border-radius:6px;background:#50362a;color:#ffd0a8;font-size:11px;line-height:1.35}.admin-banner,.spectator-banner{padding:12px 16px;margin:0 0 16px;border-radius:11px;font-size:14px;line-height:1.5}.admin-banner{background:#4b332b;border:1px solid #8d5548;color:#ffd1c7}.spectator-banner{background:#243e48;border:1px solid #426c7a;color:#c4e8f4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:4px}button{border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink);padding:12px 16px;font-weight:600;transition:background .15s,transform .15s}button:hover:not(:disabled){background:#304951;transform:translateY(-1px)}button.primary{background:var(--mint);border-color:var(--mint);color:#12312c}button.primary:hover:not(:disabled){background:#d9f8e3}button.gold{background:var(--gold);color:#362c18;border-color:var(--gold)}button.danger{color:var(--danger);background:#35272b;border-color:#614047}button.ghost{background:transparent}button.small{padding:7px 10px;font-size:14px}a{color:var(--mint)}input,select{width:100%;border:1px solid #40515a;background:#122028;color:var(--ink);padding:12px;border-radius:10px;min-height:46px}label{font-size:14px;display:block;color:var(--muted);margin-bottom:8px}h1,h2,h3,p{margin:0}h1{font-size:36px;font-weight:600;letter-spacing:-1px}h2{font-size:22px;font-weight:600}h3{font-size:16px}small{font-size:13px;color:var(--muted)}.muted{color:var(--muted)}.eyebrow{font-size:12px;letter-spacing:3px;font-weight:700;color:var(--mint)}.topbar{height:86px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;border-bottom:1px solid var(--line);gap:16px}.brand{display:flex;align-items:center;gap:13px}.brand-mark{font-family:Georgia,serif;font-size:38px;color:var(--mint)}.brand strong{font-size:21px;font-weight:600;letter-spacing:1px}.brand small{display:block;font-size:11px;letter-spacing:3px;margin-top:4px}.top-right{display:flex;align-items:center;gap:16px}.tag{font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:20px;color:var(--muted);white-space:nowrap}.tag.green{color:var(--mint);background:#213d34;border-color:#375a4a}.dot{width:7px;height:7px;background:var(--mint);border-radius:100%;display:inline-block;margin-right:6px}.shell{max-width:1500px;padding:30px 4% 24px;margin:auto}.intro{display:flex;align-items:flex-end;justify-content:space-between;margin:8px 0 27px;gap:15px}.intro p{color:var(--muted);line-height:1.7;margin-top:9px;font-size:15px}.intro .eyebrow{margin-bottom:9px}.lobby{display:grid;grid-template-columns:400px 1fr;gap:28px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px}.step{border:1px solid var(--line);border-radius:50%;width:27px;height:27px;display:inline-grid;place-items:center;font-size:13px;color:var(--mint);margin-right:9px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 14px}.full{grid-column:1/-1}.hint{font-size:13px;line-height:1.6;color:var(--muted);margin-top:7px}.full-button{width:100%;padding:15px;margin-top:22px}.sub-action{width:100%;margin-top:10px;background:transparent}.divider{height:1px;background:var(--line);margin:24px 0}.join-row{display:grid;grid-template-columns:1fr auto;gap:9px}.table-preview{min-height:465px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#10252a;border:1px solid #335051;border-radius:24px;overflow:hidden}.preview-outline{position:absolute;inset:40px 35px;border:1px solid #355454;border-radius:45%;pointer-events:none}.preview-outline:after{content:'';position:absolute;inset:12px;border:1px solid #294549;border-radius:45%}.preview-top{position:absolute;left:26px;right:26px;top:24px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}.preview-cards{display:flex;gap:9px;transform:rotate(-6deg);margin:18px 0 30px}.preview-cards .card{width:72px;height:104px;font-size:28px}.preview-title{font-family:Georgia,serif;letter-spacing:7px;font-size:25px;color:#c3ded1}.preview-sub{color:#a1c0b5;font-size:14px;margin-top:12px}.preview-chip{margin-top:29px;color:var(--gold);padding:8px 18px;border:1px solid #7a7253;border-radius:20px;font-variant-numeric:tabular-nums;font-size:14px}.feature-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:17px}.feature{padding:20px 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.feature span{font-size:21px;color:var(--mint);display:block;margin-bottom:10px}.feature strong{display:block;font-size:14px;margin-bottom:6px}.feature small{line-height:1.5;font-size:13px}.footer{display:flex;justify-content:space-between;color:#82969e;font-size:12px;margin-top:30px;gap:10px}.card{display:flex;flex-direction:column;justify-content:space-between;width:54px;height:77px;background:#f4f2e9;color:#18292f;border-radius:7px;padding:6px 8px;box-shadow:0 4px 8px #0002;font-family:Georgia,serif;font-weight:700;font-size:23px;border:1px solid #dfdfd0;text-align:left;flex-shrink:0}.card.red{color:#b94f4c}.card .suit{font-size:24px;text-align:right;line-height:1}.card.back{border:2px solid #76988b;background:repeating-linear-gradient(45deg,#30564f,#30564f 3px,#38625a 3px,#38625a 5px);align-items:center;justify-content:center;color:#b9d1c1;font-size:21px}.card.empty{background:#183b3d;border:1px dashed #50716b;box-shadow:none;color:#55796d;align-items:center;justify-content:center;font-size:22px}.room-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.room-heading h1{font-size:26px}.room-heading .subline{margin-top:9px;display:flex;gap:12px;align-items:center;font-size:14px;color:var(--muted)}.room-tools{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.game-grid{display:grid;grid-template-columns:minmax(0,1fr) 295px;gap:20px}.game-left{min-width:0}.table-surface{position:relative;height:570px;isolation:isolate}.felt{position:absolute;inset:70px 45px 73px;background:#174143;border:10px solid #2a3b3c;box-shadow:inset 0 0 0 2px #608575,inset 0 0 75px #06262b80,0 12px 30px #0003;border-radius:46%}.felt:after{content:'';position:absolute;inset:18px;border:1px solid #62847066;border-radius:46%}.table-brand{position:absolute;left:0;right:0;top:118px;text-align:center;font-family:Georgia,serif;letter-spacing:5px;color:#82a498;font-size:14px}.board-area{position:absolute;top:36%;left:50%;transform:translateX(-50%);text-align:center;width:100%;pointer-events:none}.pot{color:var(--gold);font-size:27px;font-weight:600;font-variant-numeric:tabular-nums;margin-bottom:15px}.pot small{display:block;color:#b0c8bf;letter-spacing:2px;font-size:12px;font-weight:400;margin-bottom:5px}.community{display:flex;justify-content:center;gap:7px}.street-label{color:#99bdb0;margin-top:12px;font-size:13px}.seat{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:112px;z-index:2;text-align:center}.seat-body{background:#1b2c33;border:1px solid #456064;border-radius:13px;padding:10px 7px 8px;box-shadow:0 5px 12px #0003;position:relative}.seat.active .seat-body{border:2px solid var(--mint);padding:9px 6px 7px;box-shadow:0 0 0 4px #bcedcd18}.seat.self .seat-body{background:#29433c;border-color:#739386}.seat.folded{opacity:.5}.avatar{width:30px;height:30px;display:grid;place-items:center;background:#3a5259;color:#dae6df;border-radius:50%;font-size:13px;font-weight:600;margin:0 auto 6px}.seat.self .avatar{background:var(--mint);color:#29433c}.seat-name{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stack{font-size:16px;color:var(--gold);font-weight:600;margin-top:5px;font-variant-numeric:tabular-nums}.position-marker{position:absolute;right:-9px;top:-9px;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:#f0e5cb;color:#18292f;font-size:12px;font-weight:700;border:2px solid #1b2c33}.position-marker.blind{top:auto;bottom:-8px;background:#729db0}.hole{display:flex;justify-content:center;gap:3px;margin-top:5px}.hole .card{width:31px;height:42px;font-size:16px;padding:2px 3px;border-radius:4px}.hole .card .suit{font-size:15px}.hole .card.back{font-size:15px}.seat.self .hole .card{width:43px;height:58px;font-size:21px}.seat.self .hole .card .suit{font-size:20px}.seat-note{min-height:18px;font-size:12px;color:#b6c9c3;margin-top:4px;white-space:nowrap}.seat.active .seat-note{color:var(--mint)}.empty-seat{color:#718e92;border:1px dashed #3f5a5f;border-radius:12px;background:#14282dbf;padding:15px 5px;font-size:13px}.empty-seat span{display:block;font-size:19px;margin-bottom:6px}.bet-tag{font-size:12px;color:#e1d2a7;margin-top:4px}.status-strip{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 10px 10px;font-size:14px;color:var(--muted)}.status-strip strong{color:var(--mint);font-weight:500}.actions{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px}.action-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;font-size:14px}.action-head strong{color:var(--mint)}.action-buttons{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:9px}.raise-row{display:flex;gap:8px;margin-top:12px;align-items:center}.raise-row label{margin:0;white-space:nowrap}.raise-row input{max-width:145px;min-width:70px}.raise-row button{white-space:nowrap}.presets{display:flex;gap:6px}.waiting-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px}.waiting-actions p{font-size:14px;line-height:1.6;color:var(--muted)}.sidebar{display:flex;flex-direction:column;gap:16px}.sidebar .panel{padding:20px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.facts dt{font-size:12px;color:var(--muted);margin-bottom:6px}.facts dd{margin:0;font-size:15px;font-weight:500}.sidebar h2{font-size:17px}.roster{display:flex;flex-direction:column;gap:14px;margin-top:20px}.roster-row{display:flex;align-items:center;gap:10px;font-size:14px}.roster-row .avatar{margin:0;flex-shrink:0}.roster-name{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis}.roster-name small{display:block;font-size:12px;margin-top:4px}.roster-row select{width:72px;min-height:32px;padding:4px;font-size:12px}.bot-add{display:flex;gap:8px;margin-top:17px}.bot-add select{min-height:38px;padding:6px;font-size:14px}.bot-add button{white-space:nowrap}.history{max-height:210px;overflow:auto;margin-top:14px;font-size:13px;line-height:1.8;scrollbar-width:thin}.history p{padding:6px 0;border-bottom:1px solid #2b3c44}.history span{color:#748e96;margin-right:7px;font-size:12px}.summary{margin-top:12px;padding:14px 16px;background:#2d4034;border:1px solid #567052;border-radius:12px;color:#dcebd9;font-size:14px;line-height:1.8}.summary strong{color:var(--gold)}.rules{margin-top:18px;font-size:13px;color:var(--muted);line-height:1.9}.rules summary{cursor:pointer;color:#d4e0dd;font-size:14px}.rules ol{padding-left:21px}.connection{color:var(--gold);font-size:13px}.join-panel{max-width:450px;margin:60px auto}.join-panel h1{font-size:28px;margin:16px 0}.join-panel p{line-height:1.7;color:var(--muted);margin-bottom:24px}.error-box{background:#442f31;color:#ffd2ca;border:1px solid #785357;padding:14px;border-radius:10px;margin:15px 0;font-size:14px;line-height:1.6}#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#e3eedf;color:#18372c;padding:14px 22px;border-radius:12px;box-shadow:0 8px 30px #0005;z-index:20;opacity:0;pointer-events:none;transition:.2s;max-width:min(90vw,600px);font-size:14px}#toast.show{opacity:1;transform:translate(-50%,0)}.offline-note{margin:0 0 20px;padding:12px 15px;background:#342f23;border:1px solid #6c6040;color:#e6d5a7;border-radius:10px;font-size:14px;line-height:1.7}.chip-total{color:var(--gold)}
+@media(min-width:1400px){.table-surface{height:610px}.felt{inset:74px 52px 77px}.seat{width:123px}.table-brand{top:132px}.community .card{width:60px;height:85px}}
+@media(max-width:1100px){.lobby{grid-template-columns:360px 1fr;gap:20px}.game-grid{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.sidebar .panel:last-child{grid-column:1/-1}.table-surface{height:570px}.shell{padding-left:24px;padding-right:24px}.presets{margin-left:auto}}
+@media(max-width:760px){.topbar{height:72px;padding:0 20px}.brand strong{font-size:18px}.top-right{gap:6px}.top-right .tag{display:none}.shell{padding:22px 16px}.intro{align-items:flex-start}.intro h1{font-size:29px}.intro .tag{display:none}.lobby{grid-template-columns:1fr}.lobby-preview{display:none}.panel{padding:22px}.footer{flex-direction:column;line-height:1.8}.room-heading{align-items:flex-start;flex-direction:column}.room-tools{justify-content:flex-start}.room-heading h1{font-size:24px}.table-surface{height:auto;padding:0 0 14px;display:flex;flex-direction:column;background:#123135;border:1px solid #395b5b;border-radius:18px;overflow:hidden}.felt,.table-brand{display:none}.board-area{position:static;transform:none;order:0;padding:22px 0;background:#174143;border-bottom:1px solid #3b5c58}.pot{font-size:24px;margin-bottom:12px}.community .card{width:46px;height:66px;font-size:22px}.seats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;padding:20px 13px 6px;order:1}.seat{position:static;transform:none;width:auto;text-align:left}.seat-body{display:grid;grid-template-columns:30px minmax(0,1fr);column-gap:7px;padding:10px 8px;min-height:63px;box-shadow:none}.seat.active .seat-body{padding:9px 7px}.seat .avatar{grid-row:span 2;margin:0;align-self:center}.seat-name{align-self:center;font-size:13px}.stack{font-size:15px;margin-top:3px}.hole{margin-top:6px;justify-content:flex-start}.seat.self .hole .card,.hole .card{height:43px;width:31px;font-size:16px}.seat.self .hole .card .suit{font-size:15px}.empty-seat{height:64px;display:flex;align-items:center;justify-content:center;gap:9px}.empty-seat span{margin:0}.seat-note{font-size:12px;white-space:normal;margin-top:5px}.bet-tag{font-size:12px}.actions{position:sticky;bottom:8px;z-index:5;box-shadow:0 3px 24px #0005;padding:13px}.status-strip{padding:14px 0;font-size:13px}.raise-row{flex-wrap:wrap}.raise-row input{flex:1;max-width:none}.raise-row label{font-size:13px}.raise-row button{padding:11px}.presets{width:100%;margin:0}.presets button{flex:1;padding:7px;font-size:12px}.action-buttons button{padding:12px 5px;font-size:14px}.sidebar{grid-template-columns:1fr}.sidebar .panel:last-child{grid-column:auto}.waiting-actions{flex-wrap:wrap}.waiting-actions button{width:100%}.summary{font-size:13px}.top-right button{font-size:12px}.join-panel{margin:25px auto}.room-heading .subline{flex-wrap:wrap;font-size:13px}.room-tools button{font-size:13px;padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body><div id="app"></div><div id="toast" role="status" aria-live="polite"></div><script type="module">globalThis.RIVER_STANDALONE=true;
+// Pure poker rules. The server owns the authoritative instance.
+const STREETS = ['preflop', 'flop', 'turn', 'river'];
+const HAND_NAMES = ['高牌','一对','两对','三条','顺子','同花','葫芦','四条','同花顺'];
+const fail = message => { throw new Error(message); };
+const live = r => r.players.filter(p => p.inHand && !p.folded);
+const actors = r => live(r).filter(p => p.stack > 0);
+const ordered = r => [...r.players].sort((a,b) => a.seat-b.seat);
+function after(r, seat, predicate) {
+  const ps=ordered(r).filter(predicate);
+  return ps.find(p=>p.seat>seat) ?? ps[0];
+}
+function randomInt(n) {
+  const a=new Uint32Array(1), max=Math.floor(4294967296/n)*n;
+  do { globalThis.crypto.getRandomValues(a); } while(a[0]>=max);
+  return a[0]%n;
+}
+function deckCards(shortDeck=false) { return Array.from({length:shortDeck?36:52},(_,i)=>i+(shortDeck?16:0)); }
+function shuffle(cards=deckCards()) {
+  const deck=[...cards];
+  for(let i=deck.length-1;i>0;i--){const j=randomInt(i+1);[deck[i],deck[j]]=[deck[j],deck[i]];}
+  return deck;
+}
+function evaluate5(cards,shortDeck=false) {
+  const ranks=cards.map(c=>2+Math.floor(c/4)).sort((a,b)=>b-a);
+  const groups=[...new Set(ranks)].map(v=>[v,ranks.filter(r=>r===v).length]).sort((a,b)=>b[1]-a[1] || b[0]-a[0]);
+  const unique=[...new Set(ranks)];
+  const flush=cards.every(c=>c%4===cards[0]%4);
+  const straight=unique.length===5 ? (unique[0]-unique[4]===4 ? unique[0] : !shortDeck&&unique.join(',')==='14,5,4,3,2' ? 5 : shortDeck&&unique.join(',')==='14,9,8,7,6' ? 9 : 0) : 0;
+  let category=0, kickers=ranks;
+  if(flush&&straight){category=8;kickers=[straight];}
+  else if(groups[0][1]===4){category=7;kickers=[groups[0][0],groups[1][0]];}
+  else if(groups[0][1]===3&&groups[1][1]===2){category=6;kickers=[groups[0][0],groups[1][0]];}
+  else if(flush){category=5;}
+  else if(straight){category=4;kickers=[straight];}
+  else if(groups[0][1]===3){category=3;kickers=groups.map(g=>g[0]);}
+  else if(groups[0][1]===2&&groups[1][1]===2){category=2;kickers=groups.map(g=>g[0]);}
+  else if(groups[0][1]===2){category=1;kickers=groups.map(g=>g[0]);}
+  const strength=shortDeck?(category===5?6:category===6?5:category):category;
+  let score=strength;
+  for(let i=0;i<5;i++)score=score*15+(kickers[i]??0);
+  return {score,category,name:HAND_NAMES[category],cards:[...cards]};
+}
+function evaluate(cards,shortDeck=false) {
+  if(cards.length<5 || cards.length>7)fail('需要 5 至 7 张牌');
+  let best=null;
+  for(let a=0;a<cards.length-4;a++)for(let b=a+1;b<cards.length-3;b++)for(let c=b+1;c<cards.length-2;c++)for(let d=c+1;d<cards.length-1;d++)for(let e=d+1;e<cards.length;e++){
+    const v=evaluate5([cards[a],cards[b],cards[c],cards[d],cards[e]],shortDeck);
+    if(!best||v.score>best.score)best=v;
+  }
+  return best;
+}
+function settings(input={}) {
+  const s={capacity:Number(input.capacity??6),buyIn:Number(input.buyIn??2000),smallBlind:Number(input.smallBlind??10),bigBlind:Number(input.bigBlind??20),turnSeconds:Number(input.turnSeconds??30),deckType:input.deckType==='short'?'short':'long'};
+  if(!Number.isInteger(s.capacity)||s.capacity<2||s.capacity>10)fail('人数应为 2–10 人');
+  if(!Number.isInteger(s.buyIn)||s.buyIn<100||s.buyIn>1000000)fail('入场筹码应为 100–1,000,000 的整数');
+  if(!Number.isInteger(s.smallBlind)||!Number.isInteger(s.bigBlind)||s.smallBlind<1||s.bigBlind<s.smallBlind*2||s.bigBlind>s.buyIn/5)fail('大盲至少为小盲的 2 倍，且不超过入场筹码的 1/5');
+  if(![15,30,60].includes(s.turnSeconds))fail('行动时间无效');
+  return s;
+}
+function makeRoom(id,input={}) {
+  return {id,settings:settings(input),hostId:null,players:[],spectators:[],adminActive:false,status:'waiting',handNo:0,dealer:-1,sb:null,bb:null,board:[],deck:[],burn:[],street:'preflop',currentBet:0,minRaise:20,actorId:null,deadline:null,nextAt:null,results:[],pots:[],logs:[],revision:0,createdAt:Date.now(),updatedAt:Date.now()};
+}
+function log(r,text){r.logs.push({hand:r.handNo,text});r.logs=r.logs.slice(-60);}
+function addPlayer(r,id,name,{bot=false,difficulty='medium',now=Date.now()}={}) {
+  if(r.players.length>=r.settings.capacity)fail('房间已满');
+  name=String(name??'').trim().slice(0,16);
+  if(!name)fail('请填写昵称');
+  if(!['easy','medium','hard'].includes(difficulty))fail('电脑难度无效');
+  const seats=new Set(r.players.map(p=>p.seat)); let seat=0;while(seats.has(seat))seat++;
+  const p={id,name,seat,bot,difficulty,stack:r.settings.buyIn,invested:r.settings.buyIn,rebuys:0,hole:[],bet:0,total:0,inHand:false,folded:false,acted:false,lastActBet:0,lastAction:'',lastSeen:now,sitOut:false,leaving:false,rebuyPending:false,firstActionHand:0,foldOpenStreak:0,allinOpenStreak:0,warning:null,kicked:false};
+  r.players.push(p); if(!r.hostId&&!bot)r.hostId=id;
+  log(r,`${name} 加入房间`);return p;
+}
+function addSpectator(r,id,name,{now=Date.now()}={}) {
+  name=String(name??'').trim().slice(0,16);if(!name)fail('请填写昵称');
+  r.spectators??=[];const s={id,name,lastSeen:now};r.spectators.push(s);log(r,`${name} 进入观战`);return s;
+}
+function pay(p,amount){const n=Math.min(p.stack,amount);p.stack-=n;p.bet+=n;p.total+=n;return n;}
+function turn(r,p,now){r.actorId=p?.id??null;r.deadline=p?now+(p.bot?1100:r.settings.turnSeconds*1000):null;}
+function draw(r,n){for(let i=0;i<n;i++)r.board.push(r.deck.pop());}
+function startHand(r,now=Date.now(),fixedDeck) {
+  if(r.status==='playing')fail('本手尚未结束');
+  r.players=r.players.filter(p=>!p.leaving);
+  for(const p of r.players){
+    if((p.rebuyPending||p.bot)&&p.stack===0){p.stack=r.settings.buyIn;p.invested+=r.settings.buyIn;p.rebuys++;}
+    p.rebuyPending=false;
+  }
+  const eligible=p=>p.stack>0&&!p.sitOut;
+  if(r.players.filter(eligible).length<2){r.status='waiting';r.nextAt=null;return false;}
+  r.status='playing';r.handNo++;r.board=[];r.burn=[];r.deck=fixedDeck?[...fixedDeck]:shuffle(deckCards(r.settings.deckType==='short'));r.results=[];r.pots=[];r.nextAt=null;r.street='preflop';r.currentBet=r.settings.bigBlind;r.minRaise=r.settings.bigBlind;
+  for(const p of r.players){p.inHand=eligible(p);p.folded=false;p.hole=[];p.bet=0;p.total=0;p.acted=false;p.lastActBet=0;p.lastAction=p.inHand?'':'等待入座';}
+  const dealer=after(r,r.dealer,eligible);r.dealer=dealer.seat;
+  const sb=r.players.filter(eligible).length===2?dealer:after(r,dealer.seat,eligible);
+  const bb=after(r,sb.seat,eligible);r.sb=sb.id;r.bb=bb.id;
+  const dealOrder=[...ordered(r).filter(p=>eligible(p)&&p.seat>dealer.seat),...ordered(r).filter(p=>eligible(p)&&p.seat<=dealer.seat)];
+  for(let i=0;i<2;i++)for(const p of dealOrder)p.hole.push(r.deck.pop());
+  pay(sb,r.settings.smallBlind);sb.lastAction='小盲';pay(bb,r.settings.bigBlind);bb.lastAction='大盲';
+  log(r,`第 ${r.handNo} 手 · 盲注 ${r.settings.smallBlind}/${r.settings.bigBlind}`);
+  turn(r,after(r,bb.seat,p=>p.inHand&&p.stack>0),now);
+  progress(r,bb.seat,now);return true;
+}
+function legalActions(r,id) {
+  const p=r.players.find(p=>p.id===id);
+  if(!p||r.status!=='playing'||r.actorId!==id)return null;
+  const due=Math.max(0,r.currentBet-p.bet),maxTo=p.bet+p.stack;
+  const otherCanBet=actors(r).some(o=>o.id!==id);
+  const reopened=!p.acted || p.lastAction==='过牌' || r.currentBet-p.lastActBet>=r.minRaise;
+  return {canCheck:due===0,toCall:Math.min(p.stack,due),due,minTo:r.currentBet+r.minRaise,maxTo,canRaise:otherCanBet&&reopened&&maxTo>r.currentBet,canAllIn:maxTo<=r.currentBet||(otherCanBet&&reopened),currentBet:r.currentBet};
+}
+function act(r,id,action,amount,now=Date.now()) {
+  const legal=legalActions(r,id);if(!legal)fail('还没有轮到你行动');
+  const p=r.players.find(p=>p.id===id);const openingAction=r.street==='preflop'&&p.firstActionHand!==r.handNo;let kind=action;
+  if(kind==='allin'){
+    if(!legal.canAllIn)fail('本轮加注尚未重新开放');
+    if(legal.maxTo>r.currentBet){kind='raise';amount=legal.maxTo;}else kind='call';
+  }
+  if(kind==='fold'){p.folded=true;p.lastAction='弃牌';}
+  else if(kind==='check'){if(!legal.canCheck)fail('需要跟注或弃牌');p.lastAction='过牌';}
+  else if(kind==='call'){if(legal.due===0)fail('无需跟注，请过牌');const n=pay(p,legal.toCall);p.lastAction=p.stack===0?`全下 ${p.bet}`:`跟注 ${n}`;}
+  else if(kind==='raise'){
+    amount=Number(amount);
+    if(!legal.canRaise)fail('当前不能加注');
+    if(!Number.isSafeInteger(amount)||amount>legal.maxTo||amount<=r.currentBet)fail('加注金额无效');
+    if(amount<legal.minTo&&amount!==legal.maxTo)fail(`最少加注至 ${legal.minTo}`);
+    const increment=amount-r.currentBet;
+    if(increment>=r.minRaise){r.minRaise=increment;for(const q of actors(r))if(q.id!==id)q.acted=false;}
+    pay(p,amount-p.bet);r.currentBet=amount;p.lastAction=p.stack===0?`全下 ${amount}`:`${legal.currentBet===0?'下注':'加注至'} ${amount}`;
+  }else fail('无效操作');
+  p.acted=true;p.lastActBet=r.currentBet;
+  if(openingAction&&!p.bot){
+    p.firstActionHand=r.handNo;
+    p.foldOpenStreak=action==='fold'?(p.foldOpenStreak??0)+1:0;
+    p.allinOpenStreak=action==='allin'?(p.allinOpenStreak??0)+1:0;
+    if(p.foldOpenStreak===0&&p.allinOpenStreak===0)p.warning=null;
+    const streak=Math.max(p.foldOpenStreak,p.allinOpenStreak),kindName=p.foldOpenStreak>=p.allinOpenStreak?'连续开局弃牌':'连续开局全下';
+    if(streak===3){p.warning=`${kindName}已达 3 手；若第 5 手仍持续，将由电脑接管`;log(r,`⚠ ${p.name} ${p.warning}`);}
+    if(streak>=5){p.kicked=true;p.warning=`${kindName}已达 5 手，座位由电脑接管`;log(r,`⚠ ${p.name} ${p.warning}`);}
+  }
+  log(r,`${p.name} · ${p.lastAction}`);progress(r,p.seat,now);
+}
+function progress(r,lastSeat,now) {
+  if(live(r).length===1){settle(r,now);return;}
+  const active=actors(r);
+  const needs=p=>p.inHand&&!p.folded&&p.stack>0&&(!p.acted||p.bet<r.currentBet);
+  // A lone player may only match outstanding wagers, never bet into dry side pots.
+  if(active.length<=1 && (!active.length||active[0].bet>=r.currentBet)){
+    while(r.board.length<5){r.burn.push(r.deck.pop());draw(r,r.board.length===0?3:1);}r.street='river';settle(r,now);return;
+  }
+  if(active.some(needs)){turn(r,after(r,lastSeat,needs),now);return;}
+  if(r.street==='river'){settle(r,now);return;}
+  r.street=STREETS[STREETS.indexOf(r.street)+1];r.burn.push(r.deck.pop());draw(r,r.street==='flop'?3:1);
+  r.currentBet=0;r.minRaise=r.settings.bigBlind;
+  for(const p of r.players){p.bet=0;p.acted=false;p.lastActBet=0;if(p.inHand&&!p.folded&&p.stack>0)p.lastAction='';}
+  turn(r,after(r,r.dealer,p=>p.inHand&&!p.folded&&p.stack>0),now);
+}
+function settle(r,now=Date.now()) {
+  const contenders=live(r);const payouts=new Map();const levels=[...new Set(r.players.map(p=>p.total).filter(n=>n>0))].sort((a,b)=>a-b);
+  let previous=0;r.pots=[];
+  for(const level of levels){
+    const contributors=r.players.filter(p=>p.total>=level);
+    const amount=(level-previous)*contributors.length;previous=level;
+    if(contributors.length===1){const p=contributors[0];p.stack+=amount;r.pots.push({amount,winners:[p.name],refund:true});continue;}
+    const eligible=contenders.filter(p=>p.total>=level);
+    if(!eligible.length)fail('底池状态异常');
+    let winners=eligible;
+    if(eligible.length>1){const ranked=eligible.map(p=>({p,score:evaluate([...p.hole,...r.board],r.settings.deckType==='short').score}));const best=Math.max(...ranked.map(x=>x.score));winners=ranked.filter(x=>x.score===best).map(x=>x.p);}
+    winners.sort((a,b)=>((a.seat-r.dealer-1+r.settings.capacity)%r.settings.capacity)-((b.seat-r.dealer-1+r.settings.capacity)%r.settings.capacity));
+    const share=Math.floor(amount/winners.length);let extra=amount%winners.length;
+    for(const p of winners){const n=share+(extra-->0?1:0);p.stack+=n;payouts.set(p.id,(payouts.get(p.id)??0)+n);}
+    r.pots.push({amount,winners:winners.map(p=>p.name),refund:false});
+  }
+  r.results=[...payouts].map(([id,amount])=>{const p=r.players.find(p=>p.id===id);return {id,name:p.name,amount,hand:contenders.length>1?evaluate([...p.hole,...r.board],r.settings.deckType==='short').name:'其他玩家弃牌'};});
+  r.showCards=contenders.length>1;r.status='showdown';r.actorId=null;r.deadline=null;r.nextAt=now+9000;
+  for(const x of r.results)log(r,`${x.name} 赢得 ${x.amount} · ${x.hand}`);
+}
+function rebuy(r,id) {
+  const p=r.players.find(p=>p.id===id);if(!p)fail('座位不存在');
+  if(p.stack!==0)fail('筹码输光后可以补筹');
+  if(r.status==='playing'&&p.inHand){p.rebuyPending=true;log(r,`${p.name} 预约下一手补筹`);return;}
+  p.stack=r.settings.buyIn;p.invested+=r.settings.buyIn;p.rebuys++;p.rebuyPending=false;log(r,`${p.name} 补筹 ${r.settings.buyIn}`);
+}
+function leave(r,id,now=Date.now()) {
+  const p=r.players.find(p=>p.id===id);if(!p)return;
+  p.leaving=true;p.sitOut=true;
+  if(r.actorId===id)act(r,id,'fold',null,now);
+  // Keep contributed chips in the current hand until settlement.
+  else if(r.status==='playing'&&p.inHand&&!p.folded&&p.stack>0){p.folded=true;p.lastAction='离桌弃牌';if(live(r).length===1)settle(r,now);}
+  if(r.status!=='playing')r.players=r.players.filter(p=>p.id!==id);
+  if(r.hostId===id)r.hostId=r.players.find(q=>!q.bot&&!q.leaving)?.id??null;
+  log(r,`${p.name} 离开房间`);
+}
+// Monte Carlo uses only this bot's cards, public cards and opponent count.
+function botDecision(r,p,random=Math.random) {
+  const l=legalActions(r,p.id);if(!l)return null;
+  const pot=r.players.reduce((n,q)=>n+q.total,0),opponents=live(r).length-1;
+  let equity=0;
+  if(p.difficulty==='easy')equity=0.2+random()*0.65;
+  else {
+    const known=new Set([...p.hole,...r.board]),pool=deckCards(r.settings.deckType==='short').filter(c=>!known.has(c));
+    const rounds=p.difficulty==='hard'?100:28;
+    for(let i=0;i<rounds;i++){
+      const d=[...pool];for(let j=d.length-1;j>0;j--){const k=Math.floor(random()*(j+1));[d[j],d[k]]=[d[k],d[j]];}
+      const board=[...r.board];while(board.length<5)board.push(d.pop());
+      const my=evaluate([...p.hole,...board],r.settings.deckType==='short').score;let ties=1,beaten=false;
+      for(let j=0;j<opponents;j++){const v=evaluate([d.pop(),d.pop(),...board],r.settings.deckType==='short').score;if(v>my){beaten=true;break;}if(v===my)ties++;}
+      if(!beaten)equity+=1/ties;
+    }equity/=rounds;
+  }
+  const odds=l.toCall/(pot+l.toCall||1),bluff=random()<(p.difficulty==='hard'?0.07:0.025);
+  if(l.canRaise&&(equity>Math.max(0.55,1/(opponents+1)+0.2)||bluff)){
+    const to=Math.min(l.maxTo,Math.max(l.minTo,r.currentBet+Math.round(Math.max(pot, r.settings.bigBlind*2)*(p.difficulty==='hard'?0.7:0.5))));
+    return {action:'raise',amount:to};
+  }
+  if(l.canCheck)return {action:'check'};
+  if(equity+ (p.difficulty==='easy'?0.13:0.015)>=odds)return {action:'call'};
+  return {action:'fold'};
+}
+function tick(r,now=Date.now()) {
+  let changed=false;
+  if(r.status==='playing'&&r.deadline<=now){const p=r.players.find(p=>p.id===r.actorId);if(p){const d=p.bot?botDecision(r,p):{action:legalActions(r,p.id).canCheck?'check':'fold'};act(r,p.id,d.action,d.amount,now);changed=true;}}
+  if(r.status==='showdown'&&r.nextAt<=now){
+    for(const p of r.players)if(!p.bot&&now-p.lastSeen>60000)p.sitOut=true;
+    startHand(r,now);changed=true;
+  }
+  return changed;
+}
+function publicView(r,id,now=Date.now(),isAdmin=false) {
+  const spectator=(r.spectators??[]).find(s=>s.id===id);
+  return {id:r.id,settings:r.settings,hostId:r.hostId,status:r.status,handNo:r.handNo,dealer:r.dealer,sb:r.sb,bb:r.bb,board:r.board,street:r.street,currentBet:r.currentBet,actorId:r.actorId,deadline:r.deadline,nextAt:r.nextAt,results:r.results,pots:r.pots,logs:r.logs.slice(-30),revision:r.revision,serverNow:now,me:id,role:spectator?'spectator':'player',spectatorCount:(r.spectators??[]).filter(s=>now-s.lastSeen<15000).length,admin:isAdmin,adminActive:!!r.adminActive,legal:spectator?null:legalActions(r,id),pot:r.players.reduce((n,p)=>n+p.total,0),players:ordered(r).map(p=>({id:p.id,name:p.name,seat:p.seat,bot:p.bot,difficulty:p.difficulty,stack:p.stack,invested:p.invested,net:p.stack+p.total-p.invested,rebuys:p.rebuys,bet:p.bet,inHand:p.inHand,folded:p.folded,lastAction:p.lastAction,sitOut:p.sitOut,leaving:p.leaving,rebuyPending:p.rebuyPending,warning:p.warning,kicked:p.kicked,connected:p.bot||now-p.lastSeen<15000,hole:isAdmin||p.id===id||(r.status==='showdown'&&r.showCards&&p.inHand&&!p.folded)?p.hole:p.hole.map(()=>null)}))};
+}
+
+const app=document.querySelector('#app');
+const standalone=location.protocol==='file:' || globalThis.RIVER_STANDALONE===true;
+let view=null,localRoom=null,me=null,localAdmin=false,roomCode=new URLSearchParams(location.search).get('room')?.toUpperCase()??'',secret='',busy=false,polling=false,connectionError=false,errorText='',raiseValue=null,lastTurn='',timerOffset=0;
+const difficultyName={easy:'简单',medium:'中等',hard:'困难'};
+const streetName={preflop:'翻牌前',flop:'翻牌',turn:'转牌',river:'河牌'};
+const suit=['♠','♥','♣','♦'];
+const fmt=n=>Number(n).toLocaleString('zh-CN');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const newId=()=>crypto.randomUUID();
+function readSaved(key){try{return localStorage.getItem(key)??'';}catch{return '';}}
+function save(key,value){try{localStorage.setItem(key,value);}catch{}}
+function toast(text){const t=document.querySelector('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3500);}
+function card(c,empty=false){if(empty)return '<div class="card empty" aria-label="待发公共牌">♠</div>';if(c===null)return '<div class="card back" aria-label="隐藏底牌">♠</div>';const rank=2+Math.floor(c/4),label=({11:'J',12:'Q',13:'K',14:'A'})[rank]??rank;return `<div class="card ${c%4===1||c%4===3?'red':''}" aria-label="${suit[c%4]}${label}"><span>${label}</span><span class="suit">${suit[c%4]}</span></div>`;}
+function header(){return `<header class="topbar"><div class="brand"><span class="brand-mark">♠</span><div><strong>河畔牌室</strong><small>RIVER ROOM</small></div></div><div class="top-right"><span class="tag">无限注德州扑克</span><span class="tag green"><span class="dot"></span>虚拟筹码</span>${view?'<button class="ghost small" data-action="rules">玩法说明</button>':''}</div></header>`;}
+function footer(){return '<footer class="footer"><span>RIVER ROOM &nbsp; / &nbsp; 好友围桌，随时开局。</span><span>仅使用虚拟筹码 · 无充值、提现或现金兑换</span></footer>';}
+function options(values,selected,labels){return values.map(v=>`<option value="${v}" ${String(v)===String(selected)?'selected':''}>${labels?labels(v):v}</option>`).join('');}
+function rules(){return `<details class="rules" id="rules"><summary>牌局规则与补筹说明</summary><ol><li>长牌使用 52 张牌；短牌使用 6–A 共 36 张，A-6-7-8-9 算九高顺子，且同花大于葫芦、顺子大于三条。</li><li>每人两张底牌，与五张公共牌组合，选出最大的五张牌。庄位每手顺时针移动。</li><li>小盲、大盲自动扣除；两人桌庄家为小盲，翻牌前先行动，翻牌后后行动。</li><li>加注金额表示本轮总下注额。最低加注增量等于上一次完整加注增量；不足最低加注的全下不一定重新开放加注。</li><li>全下自动生成边池。平局分池，无法均分的零头从庄家左侧起依次分配。未被跟注的筹码退回。</li><li>输光后可补回入场筹码，正在牌局中的补筹下一手生效。电脑输光后自动补筹。</li><li>每手第一次行动连续 3 手弃牌或全下会警告；连续到第 5 手时离座并由中等电脑接管，原玩家转为观战。</li><li>房间满员后，新加入者自动观战。管理员查看模式开启时，牌桌会公开显示管理员正在查看所有底牌。</li><li>超时自动过牌；不能过牌则弃牌。离线超过一分钟会在下一手暂离。</li></ol></details>`;}
+function renderLobby(){
+  app.innerHTML=header()+`<main class="shell"><div class="intro"><div><div class="eyebrow">YOUR TABLE. YOUR PEOPLE.</div><h1>朋友到齐，就开一桌。</h1><p>设置人数与筹码，邀请好友；空位也可以交给电脑。</p></div><span class="tag">2–10 人 · 随时补筹</span></div>${standalone?'<div class="offline-note">当前是本机试玩版，可与电脑完整对局。联机服务启动后，同一网页支持创建房间与链接邀请。</div>':''}<div class="lobby"><section class="panel"><div class="panel-head"><h2><span class="step">01</span>创建房间</h2><span class="tag">好友桌</span></div><form id="create-form"><div class="form-grid"><div class="full"><label for="name">你的昵称</label><input id="name" name="name" maxlength="16" required autocomplete="nickname" placeholder="给牌桌上的你起个名字" value="${esc(readSaved('river-name'))}"></div><div><label for="capacity">座位数量</label><select id="capacity" name="capacity">${options([2,3,4,5,6,7,8,9,10],6,n=>n+' 人')}</select></div><div><label for="deckType">牌组类型</label><select id="deckType" name="deckType">${options(['long','short'],'long',v=>v==='long'?'长牌 · 52 张':'短牌 · 36 张')}</select></div><div><label for="buyIn">每人入场筹码</label><input id="buyIn" name="buyIn" type="number" min="100" max="1000000" step="1" value="2000" required></div><div><label for="smallBlind">小盲</label><input id="smallBlind" name="smallBlind" type="number" min="1" value="10" required></div><div><label for="bigBlind">大盲</label><input id="bigBlind" name="bigBlind" type="number" min="2" value="20" required></div><div><label for="bots">添加电脑</label><select id="bots" name="bots">${options([0,1,2,3,4,5],standalone?3:2,n=>n+' 位')}</select></div><div><label for="difficulty">电脑默认难度</label><select id="difficulty" name="difficulty">${options(['easy','medium','hard'],'medium',v=>difficultyName[v])}</select></div><div class="full"><label for="turnSeconds">每次行动时间</label><select id="turnSeconds" name="turnSeconds">${options([15,30,60],30,n=>n+' 秒')}</select><p class="hint">所有人使用相同的入场筹码。输光可补筹，下一手继续。</p></div></div>${errorText?`<div class="error-box">${esc(errorText)}</div>`:''}<button class="primary full-button" type="submit">${standalone?'创建本机牌桌':'创建房间'} &nbsp; ↗</button>${standalone?'':'<button class="sub-action" type="button" data-action="demo">先和电脑试玩</button>'}</form>${standalone?'':`<div class="divider"></div><form id="code-form"><label for="room-code">已有房间？输入房间码</label><div class="join-row"><input id="room-code" name="code" placeholder="10 位房间码" maxlength="10" required><button type="submit">加入</button></div></form>`}</section><div class="lobby-preview"><div class="table-preview"><div class="preview-outline"></div><div class="preview-top"><span>PRIVATE TABLE</span><span>♠ &nbsp; ♥ &nbsp; ♣ &nbsp; ♦</span></div><div class="preview-cards">${card(48)}${card(49)}</div><div class="preview-title">TAKE A SEAT</div><p class="preview-sub">留一个位置，给你的朋友。</p><div class="preview-chip">统一入场筹码 &nbsp; · &nbsp; 公平开局</div></div><div class="feature-row"><div class="feature"><span>↗</span><strong>链接邀请</strong><small>输入昵称，即可入座</small></div><div class="feature"><span>♣</span><strong>三档电脑</strong><small>简单、中等、困难</small></div><div class="feature"><span>↻</span><strong>输光可补</strong><small>下一手，继续对战</small></div></div>${rules()}</div></div>${footer()}</main>`;
+}
+function renderJoin(){app.innerHTML=header()+`<main class="shell"><section class="panel join-panel"><div class="eyebrow">YOU'RE INVITED</div><h1>牌桌给你留了位置。</h1><p>房间 <strong>${esc(roomCode)}</strong><br>输入昵称加入，筹码与其他玩家一致；座位已满时会自动进入观战。</p><form id="join-form"><label for="join-name">你的昵称</label><input id="join-name" name="name" required maxlength="16" value="${esc(readSaved('river-name'))}" placeholder="输入昵称">${errorText?`<div class="error-box">${esc(errorText)}</div>`:''}<button class="primary full-button" type="submit">加入牌桌 &nbsp; ↗</button><button type="button" class="sub-action" data-action="home">返回创建房间</button></form></section>${footer()}</main>`;}
+function renderSeat(p,index,count){
+  const theta=index/count*Math.PI*2,x=50+42*Math.sin(theta),y=50+39*Math.cos(theta),style=`--x:${x}%;--y:${y}%`;
+  if(!p)return `<div class="seat" style="${style}"><div class="empty-seat"><span>＋</span>等待入座</div></div>`;
+  const self=p.id===view.me,active=p.id===view.actorId;
+  let note=p.leaving?'已离桌':p.sitOut?'下一手暂离':!p.connected?'连接中…':p.rebuyPending?'已预约补筹':p.stack===0&&p.inHand&&!p.folded&&view.status==='playing'?'已全下':p.stack===0?'等待补筹':p.lastAction||(!p.inHand&&view.status!=='waiting'?'下一手入座':p.bot?difficultyName[p.difficulty]+'电脑':'已入座');
+  return `<div class="seat ${self?'self':''} ${active?'active':''} ${p.folded?'folded':''}" style="${style}"><div class="seat-body"><div class="avatar">${p.bot?'AI':esc(p.name.slice(0,1))}</div><div class="seat-name" title="${esc(p.name)}">${esc(p.name)}${self?' · 你':''}</div><div class="stack">${fmt(p.stack)}</div><div class="net ${p.net>=0?'win':'loss'}">${p.net>=0?'+':''}${fmt(p.net)}</div>${p.seat===view.dealer?'<span class="position-marker" title="庄家">D</span>':''}${p.id===view.sb||p.id===view.bb?`<span class="position-marker blind">${p.id===view.sb?'SB':'BB'}</span>`:''}</div>${p.hole.length?`<div class="hole">${p.hole.map(c=>card(c)).join('')}</div>`:''}<div class="seat-note">${active?'<span data-countdown></span> 秒 · 思考中':esc(note)}</div>${p.warning?`<div class="warning-note">⚠ ${esc(p.warning)}</div>`:''}${p.bet&&view.status==='playing'?`<div class="bet-tag">● 本轮 ${fmt(p.bet)}</div>`:''}</div>`;
+}
+function actionsHTML(){
+  const p=view.players.find(p=>p.id===view.me),l=view.legal,host=view.hostId===view.me;
+  if(view.role==='spectator')return '<div class="waiting-actions"><div><h3>你正在观战</h3><p>房间已满，你可以观看公共牌和公开行动，但不能下注。</p></div></div>';
+  if(!p)return '';
+  if(l){const key=`${view.handNo}-${view.street}-${view.actorId}-${view.currentBet}`;if(key!==lastTurn){raiseValue=Math.min(l.minTo,l.maxTo);lastTurn=key;}
+    return `<div class="action-head"><strong>轮到你行动 <span data-countdown></span>s</strong><span class="muted">可用筹码 ${fmt(p.stack)}</span></div><div class="action-buttons"><button class="danger" data-action="fold">弃牌</button><button class="primary" data-action="${l.canCheck?'check':'call'}">${l.canCheck?'过牌':'跟注 '+fmt(l.toCall)}</button><button data-action="allin" ${l.canAllIn?'':'disabled'}>全下 ${fmt(p.stack)}</button></div>${l.canRaise?`<div class="raise-row"><label for="raise-amount">加注至</label><input id="raise-amount" aria-label="加注至本轮总额" type="number" min="${Math.min(l.minTo,l.maxTo)}" max="${l.maxTo}" step="1" value="${raiseValue}"><button class="gold" data-action="raise">${l.currentBet?'加注':'下注'} ↗</button><div class="presets"><button class="small ghost" data-action="preset" data-fraction="0">最小</button><button class="small ghost" data-action="preset" data-fraction="0.5">½ 底池</button><button class="small ghost" data-action="preset" data-fraction="1">底池</button></div></div>`:'<p class="hint">当前仅可跟注、过牌或弃牌；全下按钮只在规则允许时可用。</p>'}`;
+  }
+  const status=view.status==='waiting'?'等待开局':view.status==='showdown'?'本手结束':'等待其他玩家行动';
+  return `<div class="waiting-actions"><div><h3>${p.sitOut?'你正在暂离':status}</h3><p>${view.status==='waiting'?'至少两人即可开局，房主可添加电脑。':view.status==='showdown'?'下一手将在 '+Math.max(0,Math.ceil((view.nextAt-Date.now()-timerOffset)/1000))+' 秒后开始。':!p.inHand?'你将在下一手入座。':p.folded?'你已弃牌，下一手继续。':'留意牌桌上的行动提示。'}</p></div>${p.stack===0?`<button class="gold" data-action="rebuy" ${p.rebuyPending?'disabled':''}>${p.rebuyPending?'已预约下一手补筹':'补筹 '+fmt(view.settings.buyIn)}</button>`:p.sitOut?'<button class="primary" data-action="sitOut">返回牌桌</button>':host&&view.status!=='playing'?`<button class="primary" data-action="start">${view.status==='waiting'?'开始对局':'开始下一手'} ↗</button>`:''}</div>`;
+}
+function renderRoom(){
+  const r=view,p=r.players.find(p=>p.id===r.me)??{id:r.me,name:'观战者',seat:0,sitOut:false,invested:0,rebuys:0,stack:0};
+  const host=r.hostId===r.me,count=r.settings.capacity,origin=p.seat;
+  const seats=Array.from({length:count},(_,i)=>r.players.find(p=>p.seat===(origin+i)%count));
+  app.innerHTML=header()+`<main class="shell"><div class="room-heading"><div><h1>${localRoom?'本机试玩桌':'好友对战房间'} <span class="tag green">${r.players.length}/${count} 人</span></h1><div class="subline"><span>${localRoom?'仅当前页面':`房间 ${esc(r.id)}`}</span><span>·</span><span>无限注 · 可补筹 · ${r.settings.deckType==='short'?'短牌 36 张':'长牌 52 张'}</span><span class="connection">${connectionError?'连接中，正在自动重试…':localRoom?'本机模式': '● 已连接'}</span></div></div><div class="room-tools"><button data-action="invite" ${localRoom?'disabled title="本机试玩不支持邀请"':''}>↗ 复制邀请链接</button><button class="ghost" data-action="admin">${r.admin?'管理员已开启':'管理员模式'}</button>${r.role==='player'?`<button class="ghost" data-action="sitOut">${p.sitOut?'返回牌桌':'下手暂离'}</button>`:''}<button class="ghost" data-action="leave">离开</button></div></div>${localRoom?'<div class="offline-note">本机试玩 · 对手为电脑，当前页面不会连接其他玩家。联机请使用运行中的网页服务创建房间。</div>':''}${r.adminActive?'<div class="admin-banner">⚠ 本房间有管理员正在查看所有玩家底牌</div>':''}${r.role==='spectator'?'<div class="spectator-banner">👁 当前以观战身份进入，不能参与下注</div>':''}<div class="game-grid"><div class="game-left"><div class="table-surface"><div class="felt"></div><div class="table-brand">RIVER ROOM &nbsp; ♠</div><div class="board-area"><div class="pot"><small>${r.status==='showdown'?'本手总底池':'当前底池'}</small>${fmt(r.pot)}</div><div class="community">${Array.from({length:5},(_,i)=>card(r.board[i],r.board[i]===undefined)).join('')}</div><div class="street-label">${r.status==='waiting'?'等待房主开局':r.status==='showdown'?'摊牌结算':streetName[r.street]} &nbsp; / &nbsp; 第 ${r.handNo||'—'} 手</div></div><div class="seats">${seats.map((q,i)=>renderSeat(q,i,count)).join('')}</div></div><div class="status-strip"><span>盲注 <strong>${fmt(r.settings.smallBlind)} / ${fmt(r.settings.bigBlind)}</strong></span><span>入场筹码 ${fmt(r.settings.buyIn)} · ${r.settings.turnSeconds} 秒行动</span></div><section class="actions" aria-label="你的行动">${actionsHTML()}</section>${r.status==='showdown'?`<div class="summary" role="status">${r.results.map(x=>`<strong>${esc(x.name)}</strong> 赢得 <strong>${fmt(x.amount)}</strong> · ${esc(x.hand)}`).join('<br>')}${r.pots.length>1?'<br>'+r.pots.map((pot,i)=>`${pot.refund?'退回未跟注筹码':i===0?'主池':'边池 '+i} ${fmt(pot.amount)} → ${pot.winners.map(esc).join('、')}`).join('<br>'):''}</div>`:''}${rules()}</div><aside class="sidebar"><section class="panel"><h2>牌桌设置 <span class="tag">${host?'你是房主':'好友房'}</span></h2><dl class="facts"><div><dt>座位</dt><dd>${count} 人桌</dd></div><div><dt>筹码制度</dt><dd>输光可补筹</dd></div><div><dt>你的累计带入</dt><dd>${fmt(p.invested)}</dd></div><div><dt>你的补筹次数</dt><dd>${p.rebuys} 次</dd></div></dl></section><section class="panel"><div class="panel-head" style="margin:0"><h2>在座玩家</h2><small>${r.players.length} / ${count} · ${r.spectatorCount} 人观战</small></div><div class="roster">${r.players.map(q=>`<div class="roster-row"><span class="avatar">${q.bot?'AI':esc(q.name.slice(0,1))}</span><div class="roster-name">${esc(q.name)}${q.id===r.hostId?' ♛':''}<small>${q.bot?difficultyName[q.difficulty]+'电脑':q.id===r.me?'你':q.connected?'在线':'离线'} · <span class="${q.net>=0?'win':'loss'}">${q.net>=0?'+':''}${fmt(q.net)}</span></small></div>${q.bot&&host?`<select aria-label="${esc(q.name)}难度" data-bot-id="${q.id}" ${r.status==='playing'?'disabled':''}>${options(['easy','medium','hard'],q.difficulty,d=>difficultyName[d])}</select><button class="ghost small" aria-label="移除${esc(q.name)}" data-action="removeBot" data-player-id="${q.id}" ${r.status==='playing'?'disabled':''}>×</button>`:''}</div>`).join('')}</div>${host?`<div class="bot-add"><select id="new-bot-difficulty" aria-label="新电脑难度">${options(['easy','medium','hard'],'medium',d=>difficultyName[d])}</select><button class="small" data-action="addBot" ${r.players.length>=count?'disabled':''}>＋ 电脑</button></div>`:''}</section><section class="panel"><h2>牌局记录</h2><div class="history">${r.logs.length?[...r.logs].reverse().map(x=>`<p><span>#${x.hand||'—'}</span>${esc(x.text)}</p>`).join(''):'<p class="muted">开局后，行动记录显示在这里。</p>'}</div></section></aside></div>${footer()}</main>`;
+  updateClock();
+}
+function render(){if(view)renderRoom();else if(roomCode&&!standalone)renderJoin();else renderLobby();}
+function updateClock(){if(!view)return;const n=Math.max(0,Math.ceil((view.deadline-Date.now()-timerOffset)/1000));document.querySelectorAll('[data-countdown]').forEach(e=>e.textContent=n);}
+async function request(endpoint,body){const response=await fetch(endpoint,{method:body?'POST':'GET',headers:{...(body?{'Content-Type':'application/json'}:{}),...(secret?{Authorization:'Bearer '+secret}:{})},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(10000)});const data=await response.json();if(!response.ok){const e=new Error(data.error||'连接失败，请稍后重试');e.status=response.status;throw e;}return data;}
+function accept(next,force=false){if(view&&next.id===view.id&&next.revision<view.revision)return;timerOffset=next.serverNow-Date.now();const changed=force||!view||view.revision!==next.revision||view.actorId!==next.actorId||connectionError;view=next;connectionError=false;if(changed)renderRoom();else updateClock();}
+async function poll(){if(!view||localRoom||polling||busy)return;polling=true;try{const d=await request(`/api/rooms/${roomCode}`);accept(d.view);}catch(e){if(e.status===401){view=null;secret='';errorText=e.message;render();}else if(!connectionError){connectionError=true;renderRoom();}}finally{polling=false;}}
+function startLocal(b){roomCode='LOCAL';me=newId();localRoom=makeRoom(roomCode,b.settings);addPlayer(localRoom,me,b.name);const n=Math.max(0,Math.min(Number(b.bots),localRoom.settings.capacity-1));for(let i=0;i<n;i++)addPlayer(localRoom,newId(),`电脑 ${i+1}`,{bot:true,difficulty:b.difficulty});accept(publicView(localRoom,me,Date.now(),localAdmin),true);}
+async function command(action,extra={}){
+  if(busy||!view)return;busy=true;
+  try{
+    if(action==='allin'&&!confirm(`确认全下 ${fmt(view.players.find(p=>p.id===view.me).stack)} 筹码？`))return;
+    if(action==='leave'&&!confirm('确定离开房间？未结束的手牌会弃牌；重新加入将获得新座位。'))return;
+    if(localRoom){
+      if(['fold','check','call','raise','allin'].includes(action)){
+        act(localRoom,me,action,extra.amount);
+        const kicked=localRoom.players.find(p=>p.id===me&&p.kicked);
+        if(kicked){const botId=newId(),originalName=kicked.name;kicked.id=botId;kicked.name=`${originalName} · 托管`;kicked.bot=true;kicked.difficulty='medium';kicked.kicked=false;if(localRoom.actorId===me)localRoom.actorId=botId;if(localRoom.sb===me)localRoom.sb=botId;if(localRoom.bb===me)localRoom.bb=botId;if(localRoom.hostId===me)localRoom.hostId=localRoom.players.find(p=>!p.bot&&p.id!==botId)?.id??null;addSpectator(localRoom,me,originalName);localAdmin=false;localRoom.adminActive=false;}
+      }
+      else if(action==='admin'){if(extra.password!=='126399')throw new Error('管理员密码错误');localAdmin=true;localRoom.adminActive=true;}
+      else if(action==='start'){if(!startHand(localRoom))throw new Error('至少需要两位有筹码、未暂离的玩家');}
+      else if(action==='rebuy')rebuy(localRoom,me);
+      else if(action==='addBot'){let n=1;while(localRoom.players.some(p=>p.name===`电脑 ${n}`))n++;addPlayer(localRoom,newId(),`电脑 ${n}`,{bot:true,difficulty:extra.difficulty});}
+      else if(action==='difficulty'){if(localRoom.status==='playing')throw new Error('本手结束后可调整');localRoom.players.find(p=>p.id===extra.playerId).difficulty=extra.difficulty;}
+      else if(action==='removeBot'){if(localRoom.status==='playing')throw new Error('本手结束后可移除');localRoom.players=localRoom.players.filter(p=>p.id!==extra.playerId);}
+      else if(action==='sitOut'){const p=localRoom.players.find(p=>p.id===me);p.sitOut=!p.sitOut;}
+      else if(action==='leave'){goHome();return;}
+      localRoom.revision++;accept(publicView(localRoom,me,Date.now(),localAdmin),true);
+    }else{const d=await request(`/api/rooms/${roomCode}/action`,{action,...extra,handNo:view.handNo,revision:view.revision});if(action==='leave'){save('river-token-'+roomCode,'');goHome();return;}accept(d.view,true);}
+  }catch(e){toast(e.message);}finally{busy=false;poll();}
+}
+function goHome(){view=null;localRoom=null;roomCode='';secret='';errorText='';if(!standalone)history.replaceState(null,'',location.pathname);render();}
+app.addEventListener('input',e=>{if(e.target.id==='raise-amount')raiseValue=Number(e.target.value);});
+app.addEventListener('change',e=>{
+  if(e.target.id==='capacity'){const b=document.querySelector('#bots'),n=Number(e.target.value);b.innerHTML=options(Array.from({length:n},(_,i)=>i),Math.min(Number(b.value),n-1),v=>v+' 位');}
+  if(e.target.dataset.botId)command('difficulty',{playerId:e.target.dataset.botId,difficulty:e.target.value});
+});
+app.addEventListener('submit',async e=>{
+  e.preventDefault();if(busy)return;const data=Object.fromEntries(new FormData(e.target));
+  if(e.target.id==='code-form'){roomCode=data.code.trim().toUpperCase();if(!/^[A-Z0-9]{10}$/.test(roomCode)){toast('请输入 10 位房间码');return;}history.replaceState(null,'','?room='+roomCode);errorText='';render();return;}
+  busy=true;const button=e.target.querySelector('button[type="submit"]');if(button)button.disabled=true;
+  try{
+    if(e.target.id==='create-form'){
+      save('river-name',data.name);const b={name:data.name,settings:{capacity:Number(data.capacity),buyIn:Number(data.buyIn),smallBlind:Number(data.smallBlind),bigBlind:Number(data.bigBlind),turnSeconds:Number(data.turnSeconds),deckType:data.deckType},bots:Number(data.bots),difficulty:data.difficulty};
+      if(standalone){startLocal(b);return;}
+      const d=await request('/api/rooms',b);roomCode=d.view.id;secret=d.token;save('river-token-'+roomCode,secret);history.replaceState(null,'','?room='+roomCode);accept(d.view,true);
+    }else if(e.target.id==='join-form'){
+      save('river-name',data.name);secret='';const d=await request(`/api/rooms/${roomCode}/join`,{name:data.name});secret=d.token;save('river-token-'+roomCode,secret);accept(d.view,true);if(d.watching)toast('房间已满，已自动进入观战');
+    }
+  }catch(err){toast(err.message==='Failed to fetch'?'联机服务未启动，可先和电脑试玩。':err.message);}finally{busy=false;if(button)button.disabled=false;}
+});
+app.addEventListener('click',async e=>{
+  const button=e.target.closest('[data-action]');if(!button||button.disabled)return;const action=button.dataset.action;
+  if(action==='home'){goHome();return;}
+  if(action==='rules'){const d=document.querySelector('#rules');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(action==='demo'){
+    const form=document.querySelector('#create-form');if(!form.reportValidity())return;const d=Object.fromEntries(new FormData(form));try{startLocal({name:d.name,settings:{capacity:Number(d.capacity),buyIn:Number(d.buyIn),smallBlind:Number(d.smallBlind),bigBlind:Number(d.bigBlind),turnSeconds:Number(d.turnSeconds),deckType:d.deckType},bots:Math.max(1,Number(d.bots)),difficulty:d.difficulty});}catch(err){toast(err.message);}return;
+  }
+  if(action==='admin'){const password=prompt('请输入管理员密码');if(password!==null)await command('admin',{password});return;}
+  if(action==='invite'){const url=new URL(location.href);url.search='?room='+roomCode;try{await navigator.clipboard.writeText(url.href);toast('邀请链接已复制，发给朋友即可加入');}catch{prompt('复制这个链接邀请朋友：',url.href);}return;}
+  if(action==='preset'){const l=view.legal,n=Number(button.dataset.fraction);raiseValue=Math.min(l.maxTo,Math.max(l.minTo,l.currentBet+Math.round((view.pot+l.toCall)*n)));document.querySelector('#raise-amount').value=raiseValue;return;}
+  await command(action,action==='raise'?{amount:Number(document.querySelector('#raise-amount').value)}:action==='addBot'?{difficulty:document.querySelector('#new-bot-difficulty').value}:action==='removeBot'?{playerId:button.dataset.playerId}:{});
+});
+setInterval(()=>{
+  if(localRoom&&!busy){try{const localSelf=localRoom.players.find(p=>p.id===me)??localRoom.spectators.find(s=>s.id===me);if(localSelf)localSelf.lastSeen=Date.now();if(tick(localRoom)){localRoom.revision++;accept(publicView(localRoom,me,Date.now(),localAdmin),true);}}catch(e){toast('牌局更新失败：'+e.message);}}
+  updateClock();
+},350);
+setInterval(poll,1000);
+if(roomCode&&!standalone){secret=readSaved('river-token-'+roomCode);if(secret){try{const d=await request(`/api/rooms/${roomCode}`);accept(d.view,true);}catch(e){errorText=e.message;render();}}else render();}else render();
+
+// A small optional agent surface: read the visible table or make a legal poker action.
+if(document.modelContext?.registerTool){
+  try {Promise.resolve(document.modelContext.registerTool({name:'read_poker_table',description:'Read only the cards and actions visible to the current player.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:true},execute:async()=>({content:[{type:'text',text:JSON.stringify(view??{status:'lobby'})}]})})).catch(()=>{});} catch {}
+}
+</script></body>
+</html>
