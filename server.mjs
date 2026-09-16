@@ -3,7 +3,7 @@ import {readFile,writeFile,rename,mkdir,readdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {randomBytes,createHash,webcrypto} from 'node:crypto';
-import {makeRoom,addPlayer,addSpectator,startHand,act,rebuy,leave,tick,publicView,log} from './public/engine.mjs';
+import {makeRoom,addPlayer,addSpectator,startHand,readyNext,act,rebuy,leave,tick,publicView,log} from './public/engine.mjs';
 
 globalThis.crypto ??= webcrypto;
 const base=path.dirname(fileURLToPath(import.meta.url));
@@ -12,7 +12,7 @@ const dataDir=runtimeEnv.DATA_DIR?path.resolve(runtimeEnv.DATA_DIR):path.join(ba
 const publicDir=path.join(base,'public');
 const rooms=new Map(),queues=new Map(),rates=new Map();
 await mkdir(dataDir,{recursive:true});
-function normalize(record){record.sessions??={};record.admins??={};record.room.spectators??=[];record.room.adminActive??=false;record.room.settings.deckType??='long';for(const p of record.room.players){p.firstActionHand??=0;p.foldOpenStreak??=0;p.allinOpenStreak??=0;p.warning??=null;p.kicked??=false;}return record;}
+function normalize(record){record.sessions??={};record.admins??={};record.room.spectators??=[];record.room.adminActive??=false;record.room.settings.deckType??='long';record.room.settings.tableShape??='oval';record.room.handSummary??=[];record.room.settlementUntil??=null;for(const p of record.room.players){p.avatar??='';p.readyNext??=false;p.handStartStack??=p.stack;p.firstActionHand??=0;p.foldOpenStreak??=0;p.allinOpenStreak??=0;p.warning??=null;p.kicked??=false;}for(const s of record.room.spectators)s.avatar??='';return record;}
 for(const name of await readdir(dataDir))if(/^[A-Z0-9]{10}\.json$/.test(name)){
   try {const record=normalize(JSON.parse(await readFile(path.join(dataDir,name),'utf8')));rooms.set(record.room.id,record);}catch{console.error('Could not restore room file:',name);}
 }
@@ -25,9 +25,8 @@ function problem(message,status=400){const e=new Error(message);e.status=status;
 function authenticate(record,req){const raw=req.headers.authorization?.replace(/^Bearer /,'');const key=raw&&sha(raw),id=key&&record.sessions[key];if(!id||(!record.room.players.some(p=>p.id===id&&!p.leaving)&&!record.room.spectators.some(s=>s.id===id)))problem('请重新加入房间',401);return {id,key};}
 const viewFor=(record,id,now=Date.now())=>publicView(record.room,id,now,!!record.admins[id]);
 function host(r,id){if(r.hostId!==id)problem('只有房主可以操作',403);}
-function clientIP(req){const xff=req.headers['x-forwarded-for'];if(xff){const first=xff.split(',')[0].trim();if(first)return first;}return req.socket.remoteAddress??'local';}
-function rate(req,limit=100){const key=clientIP(req),now=Date.now();let item=rates.get(key);if(!item||now>item.until){item={n:0,until:now+60000};rates.set(key,item);}if(++item.n>limit)problem('操作太频繁，请稍后再试',429);}
-async function body(req){let size=0;const chunks=[];for await(const c of req){size+=c.length;if(size>8192)problem('请求过大',413);chunks.push(c);}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}');}catch{problem('请求格式无效');}}
+function rate(req,limit=100){const key=req.socket.remoteAddress??'local',now=Date.now();let item=rates.get(key);if(!item||now>item.until){item={n:0,until:now+60000};rates.set(key,item);}if(++item.n>limit)problem('操作太频繁，请稍后再试',429);}
+async function body(req){let size=0;const chunks=[];for await(const c of req){size+=c.length;if(size>180000)problem('请求过大',413);chunks.push(c);}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}');}catch{problem('请求格式无效');}}
 function json(res,status,value){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
 async function api(req,res,url){
   if(req.method==='POST'){
@@ -38,7 +37,7 @@ async function api(req,res,url){
   if(url.pathname==='/api/rooms'&&req.method==='POST'){
     if(rooms.size>=200)problem('当前房间数量已达上限',503);
     const b=await body(req);let code;do{code=randomBytes(6).toString('hex').slice(0,10).toUpperCase();}while(rooms.has(code));
-    const r=makeRoom(code,b.settings),id=uid(),secret=token();addPlayer(r,id,b.name);
+    const r=makeRoom(code,b.settings),id=uid(),secret=token();addPlayer(r,id,b.name,{avatar:b.avatar});
     const count=Number(b.bots??0);if(!Number.isInteger(count)||count<0||count>=r.settings.capacity)problem('电脑人数无效');
     for(let i=0;i<count;i++)addPlayer(r,uid(),`电脑 ${i+1}`,{bot:true,difficulty:b.difficulty??'medium'});
     await save({room:r,sessions:{[sha(secret)]:id},admins:{}});json(res,201,{token:secret,view:publicView(r,id)});return;
@@ -51,7 +50,7 @@ async function api(req,res,url){
     const record=structuredClone(original),r=record.room,now=Date.now();let id;
     if(op==='join'&&req.method==='POST'){
       const secret=token();id=uid();const watching=r.players.length>=r.settings.capacity;
-      if(watching)addSpectator(r,id,b.name,{now});else addPlayer(r,id,b.name,{now});
+      if(watching)addSpectator(r,id,b.name,{avatar:b.avatar,now});else addPlayer(r,id,b.name,{avatar:b.avatar,now});
       record.sessions[sha(secret)]=id;r.revision++;r.updatedAt=now;
       await save(record);json(res,200,{token:secret,view:viewFor(record,id),watching});return;
     }
@@ -70,7 +69,11 @@ async function api(req,res,url){
         if(kicked){const botId=uid(),spectatorId=uid(),originalName=kicked.name;kicked.id=botId;kicked.name=`${originalName} · 托管`;kicked.bot=true;kicked.difficulty='medium';kicked.kicked=false;if(r.actorId===id)r.actorId=botId;if(r.sb===id)r.sb=botId;if(r.bb===id)r.bb=botId;if(r.hostId===id)r.hostId=r.players.find(p=>!p.bot&&p.id!==botId)?.id??null;addSpectator(r,spectatorId,originalName,{now});record.sessions[auth.key]=spectatorId;delete record.admins[id];r.adminActive=Object.keys(record.admins).length>0;id=spectatorId;}
       }else if(b.action==='admin'){
         if(String(b.password)!=='126399')problem('管理员密码错误',403);record.admins[id]=true;r.adminActive=true;log(r,'管理员查看模式已开启，所有在场人员均可看到此提示');
-      }else if(b.action==='start'){host(r,id);if(!startHand(r,now))problem('至少需要两位有筹码、未暂离的玩家');}
+      }else if(b.action==='adminClose'){
+        if(!record.admins[id])problem('管理员模式尚未开启');delete record.admins[id];r.adminActive=Object.keys(record.admins).length>0;log(r,'一位管理员已关闭查看模式');
+      }else if(b.action==='ready'){
+        if(!r.players.some(p=>p.id===id))problem('观战者无需准备',403);readyNext(r,id,now);
+      }else if(b.action==='start'){host(r,id);if(r.status!=='waiting')problem('请等待所有玩家准备下一手');if(!startHand(r,now))problem('至少需要两位有筹码、未暂离的玩家');}
       else if(b.action==='rebuy')rebuy(r,id);
       else if(b.action==='addBot'){
         host(r,id);let n=1;while(r.players.some(p=>p.name===`电脑 ${n}`))n++;addPlayer(r,uid(),`电脑 ${n}`,{bot:true,difficulty:b.difficulty??'medium'});
@@ -91,7 +94,7 @@ async function api(req,res,url){
 const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml'};
 export const server=http.createServer(async(req,res)=>{
   res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('X-Frame-Options','DENY');
-  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
+  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data: https:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
   try{
     const url=new URL(req.url,'http://localhost');
     if(url.pathname.startsWith('/api/')){await api(req,res,url);return;}
