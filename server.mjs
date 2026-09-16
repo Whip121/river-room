@@ -1,4 +1,4 @@
-import http from 'node:http';
+﻿import http from 'node:http';
 import {readFile,writeFile,rename,mkdir,readdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -25,7 +25,8 @@ function problem(message,status=400){const e=new Error(message);e.status=status;
 function authenticate(record,req){const raw=req.headers.authorization?.replace(/^Bearer /,'');const key=raw&&sha(raw),id=key&&record.sessions[key];if(!id||(!record.room.players.some(p=>p.id===id&&!p.leaving)&&!record.room.spectators.some(s=>s.id===id)))problem('请重新加入房间',401);return {id,key};}
 const viewFor=(record,id,now=Date.now())=>publicView(record.room,id,now,!!record.admins[id]);
 function host(r,id){if(r.hostId!==id)problem('只有房主可以操作',403);}
-function rate(req,limit=100){const key=req.socket.remoteAddress??'local',now=Date.now();let item=rates.get(key);if(!item||now>item.until){item={n:0,until:now+60000};rates.set(key,item);}if(++item.n>limit)problem('操作太频繁，请稍后再试',429);}
+function clientIP(req){const xff=req.headers['x-forwarded-for'];if(xff){const first=xff.split(',')[0].trim();if(first)return first;}return req.socket.remoteAddress??'local';}
+function rate(req,limit=100){const key=clientIP(req),now=Date.now();let item=rates.get(key);if(!item||now>item.until){item={n:0,until:now+60000};rates.set(key,item);}if(++item.n>limit)problem('操作太频繁，请稍后再试',429);}
 async function body(req){let size=0;const chunks=[];for await(const c of req){size+=c.length;if(size>180000)problem('请求过大',413);chunks.push(c);}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}');}catch{problem('请求格式无效');}}
 function json(res,status,value){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
 async function api(req,res,url){
