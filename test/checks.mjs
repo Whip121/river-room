@@ -42,7 +42,7 @@ export async function runChecks(){
   test('平局零头从庄家左侧分配',()=>{
     const r=table(3);r.dealer=0;r.board=[10,11,12,13,14].map(x=>c(x));r.players.forEach((p,i)=>{p.inHand=true;p.total=5;p.stack=0;p.hole=[c(2+i,1),c(7+i,2)];});r.players[2].folded=true;E.settle(r);assert.deepEqual(r.players.map(p=>p.stack),[7,8,0]);
   });
-  test('所有对手弃牌时不强制亮底牌',()=>{const r=table(2);E.startHand(r);E.act(r,r.actorId,'fold');assert.equal(r.status,'showdown');const v=E.publicView(r,'0');assert.deepEqual(v.players.find(p=>p.id==='1').hole,[null,null]);});
+  test('所有对手弃牌时不强制亮底牌',()=>{const r=table(2);E.startHand(r);E.act(r,r.actorId,'fold');assert.equal(r.status,'settlement');E.tick(r,r.settlementUntil);assert.equal(r.status,'showdown');const v=E.publicView(r,'0');assert.deepEqual(v.players.find(p=>p.id==='1').hole,[null,null]);});
   test('服务端视图不泄露牌堆、烧牌或对手底牌',()=>{
     const r=table(3);E.startHand(r);const v=E.publicView(r,'0');assert(!('deck'in v));assert(!('burn'in v));assert.deepEqual(v.players[1].hole,[null,null]);assert(v.players[0].hole.every(Number.isInteger));
   });
@@ -50,7 +50,7 @@ export async function runChecks(){
     const r=table(2,[100,100]);E.startHand(r);E.act(r,'0','allin');E.rebuy(r,'0');assert.equal(r.players[0].stack,0);assert(r.players[0].rebuyPending);E.act(r,'1','call');const p=r.players.find(p=>p.stack===0);if(p){E.rebuy(r,p.id);assert.equal(p.stack,2000);}assert.throws(()=>E.rebuy(r,r.players.find(p=>p.stack>0).id));
   });
   test('行动超时自动弃牌，免费行动时自动过牌',()=>{
-    const r=table(2);E.startHand(r,100);E.tick(r,30101);assert.equal(r.status,'showdown');const q=table(2);E.startHand(q,100);E.act(q,'0','call',null,100);E.tick(q,30101);assert.equal(q.street,'flop');
+    const r=table(2);E.startHand(r,100);E.tick(r,30101);assert.equal(r.status,'settlement');const q=table(2);E.startHand(q,100);E.act(q,'0','call',null,100);E.tick(q,30101);assert.equal(q.street,'flop');
   });
   test('预约补筹后赢回筹码时取消补筹，不覆盖赢得的筹码',()=>{
     const r=table(2);r.players[0].rebuyPending=true;r.players[0].stack=4000;const before=r.players[0].invested;E.startHand(r);assert.equal(r.players[0].stack+r.players[0].bet,4000);assert.equal(r.players[0].invested,before);assert.equal(r.players[0].rebuyPending,false);
@@ -62,7 +62,7 @@ export async function runChecks(){
     const r=table(2);E.startHand(r);E.addSpectator(r,'watch','观众');const v=E.publicView(r,'watch');assert.equal(v.role,'spectator');assert.equal(v.legal,null);assert.equal(v.spectatorCount,1);assert(v.players.every(p=>p.hole.every(c=>c===null)));assert.equal(v.players[0].net,0);
   });
   test('连续三手开局弃牌警告，第五手标记电脑接管',()=>{
-    const r=table(2);for(let h=1;h<=5;h++){E.startHand(r);while(r.status==='playing'&&r.actorId!=='0'){const l=E.legalActions(r,r.actorId);E.act(r,r.actorId,l.canCheck?'check':'call');}E.act(r,'0','fold');if(h===3)assert.match(r.players[0].warning,/3 手/);}assert.equal(r.players[0].kicked,true);
+    const r=table(2);E.startHand(r);for(let h=1;h<=5;h++){while(r.status==='playing'&&r.actorId!=='0'){const l=E.legalActions(r,r.actorId);E.act(r,r.actorId,l.canCheck?'check':'call');}E.act(r,'0','fold');if(h===3)assert.match(r.players[0].warning,/3 手/);if(h<5){E.tick(r,r.settlementUntil);E.startHand(r);}}assert.equal(r.players[0].kicked,true);
   });
   test('连续五手开局全下触发接管，改变打法会清除警告',()=>{
     const r=table(2);const prepare=(hand,currentBet=20)=>{r.status='playing';r.handNo=hand;r.street='preflop';r.actorId='0';r.currentBet=currentBet;r.minRaise=20;for(const p of r.players){p.inHand=true;p.folded=false;p.acted=false;p.bet=0;p.total=0;p.stack=1000;p.hole=[c(14),c(13)];}};
@@ -71,6 +71,12 @@ export async function runChecks(){
   });
   test('电脑决策不使用其他玩家真实底牌',()=>{
     const r=table(3);E.startHand(r);r.players[0].bot=true;r.players[0].difficulty='medium';let seed=7;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};const a=E.botDecision(r,r.players[0],rnd);r.players[1].hole=[c(14),c(14,1)];r.players[2].hole=[c(13),c(13,1)];seed=7;const b=E.botDecision(r,r.players[0],rnd);assert.deepEqual(a,b);
+  });
+  test('结算停留五秒、记录所有人单手输赢并等待全员准备',()=>{
+    const r=table(2);E.startHand(r,100);E.act(r,'0','fold',null,100);assert.equal(r.status,'settlement');assert.equal(r.settlementUntil,5100);assert.equal(r.handSummary.length,2);assert.equal(r.handSummary.reduce((sum,x)=>sum+x.delta,0),0);assert.throws(()=>E.readyNext(r,'0',200));E.tick(r,5099);assert.equal(r.status,'settlement');E.tick(r,5100);assert.equal(r.status,'showdown');E.readyNext(r,'0',5101);assert.equal(r.status,'showdown');E.readyNext(r,'1',5102);assert.equal(r.status,'playing');assert.equal(r.handNo,2);
+  });
+  test('昵称过滤和头像格式校验',()=>{
+    const r=E.makeRoom('NAMES',{capacity:2});assert.throws(()=>E.addPlayer(r,'a','张三的爸'),/昵称/);assert.throws(()=>E.addPlayer(r,'a','傻 逼'),/昵称/);const p=E.addPlayer(r,'a','清风',{avatar:'https://example.com/avatar.jpg'});assert.equal(p.avatar,'https://example.com/avatar.jpg');assert.throws(()=>E.addPlayer(r,'b','明月',{avatar:'javascript:alert(1)'}),/头像/);
   });
   test('2–10 人共 270 手随机合法对局，筹码守恒且均可结束',()=>{
     let seed=91823;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
@@ -91,7 +97,7 @@ export async function runChecks(){
         assert(E.startHand(r));let steps=0;
         while(r.status==='playing'){assert(++steps<100);const l=E.legalActions(r,r.actorId);E.act(r,r.actorId,l.canAllIn?'allin':l.canCheck?'check':'call');}
         assert.equal(r.players.reduce((sum,p)=>sum+p.stack,0),r.players.reduce((sum,p)=>sum+p.invested,0));
-        assert.equal(r.handNo,hand+1);
+        assert.equal(r.handNo,hand+1);E.tick(r,r.settlementUntil);
       }
     }
   });

@@ -2,6 +2,20 @@
 export const STREETS = ['preflop', 'flop', 'turn', 'river'];
 export const HAND_NAMES = ['高牌','一对','两对','三条','顺子','同花','葫芦','四条','同花顺'];
 const fail = message => { throw new Error(message); };
+const BLOCKED_NAMES=['傻逼','傻b','煞笔','操你','草你','妈的','尼玛','他妈','狗日','狗东西','贱人','婊子','畜生','废物','垃圾','脑残','智障','滚蛋','去死','王八蛋','龟儿子'];
+export function validateName(value){
+  const name=Array.from(String(value??'').normalize('NFKC').trim()).slice(0,16).join('');
+  if(!name)fail('请填写昵称');
+  const plain=name.toLowerCase().replace(/[\s\p{P}\p{S}_]+/gu,'');
+  if(BLOCKED_NAMES.some(word=>plain.includes(word))||/(?:你|他|她|它|谁|.+的).{0,2}(?:爸爸|妈妈|爸|妈|爹|父亲|母亲)/u.test(plain))fail('昵称含有侮辱性或冒充他人亲属的内容，请更换昵称');
+  return name;
+}
+export function validateAvatar(value){
+  const avatar=String(value??'').trim();if(!avatar)return '';
+  if(/^https:\/\/[^\s]{1,1000}$/i.test(avatar))return avatar;
+  if(/^data:image\/(?:png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(avatar)&&avatar.length<=140000)return avatar;
+  fail('头像仅支持 HTTPS 图片链接，或 100KB 以内的 PNG、JPEG、WebP 图片');
+}
 const live = r => r.players.filter(p => p.inHand && !p.folded);
 const actors = r => live(r).filter(p => p.stack > 0);
 const ordered = r => [...r.players].sort((a,b) => a.seat-b.seat);
@@ -50,7 +64,7 @@ export function evaluate(cards,shortDeck=false) {
   return best;
 }
 export function settings(input={}) {
-  const s={capacity:Number(input.capacity??6),buyIn:Number(input.buyIn??2000),smallBlind:Number(input.smallBlind??10),bigBlind:Number(input.bigBlind??20),turnSeconds:Number(input.turnSeconds??30),deckType:input.deckType==='short'?'short':'long'};
+  const s={capacity:Number(input.capacity??6),buyIn:Number(input.buyIn??2000),smallBlind:Number(input.smallBlind??10),bigBlind:Number(input.bigBlind??20),turnSeconds:Number(input.turnSeconds??30),deckType:input.deckType==='short'?'short':'long',tableShape:input.tableShape==='round'?'round':'oval'};
   if(!Number.isInteger(s.capacity)||s.capacity<2||s.capacity>10)fail('人数应为 2–10 人');
   if(!Number.isInteger(s.buyIn)||s.buyIn<100||s.buyIn>1000000)fail('入场筹码应为 100–1,000,000 的整数');
   if(!Number.isInteger(s.smallBlind)||!Number.isInteger(s.bigBlind)||s.smallBlind<1||s.bigBlind<s.smallBlind*2||s.bigBlind>s.buyIn/5)fail('大盲至少为小盲的 2 倍，且不超过入场筹码的 1/5');
@@ -58,28 +72,27 @@ export function settings(input={}) {
   return s;
 }
 export function makeRoom(id,input={}) {
-  return {id,settings:settings(input),hostId:null,players:[],spectators:[],adminActive:false,status:'waiting',handNo:0,dealer:-1,sb:null,bb:null,board:[],deck:[],burn:[],street:'preflop',currentBet:0,minRaise:20,actorId:null,deadline:null,nextAt:null,results:[],pots:[],logs:[],revision:0,createdAt:Date.now(),updatedAt:Date.now()};
+  return {id,settings:settings(input),hostId:null,players:[],spectators:[],adminActive:false,status:'waiting',handNo:0,dealer:-1,sb:null,bb:null,board:[],deck:[],burn:[],street:'preflop',currentBet:0,minRaise:20,actorId:null,deadline:null,nextAt:null,settlementUntil:null,handSummary:[],results:[],pots:[],logs:[],revision:0,createdAt:Date.now(),updatedAt:Date.now()};
 }
 export function log(r,text){r.logs.push({hand:r.handNo,text});r.logs=r.logs.slice(-60);}
-export function addPlayer(r,id,name,{bot=false,difficulty='medium',now=Date.now()}={}) {
+export function addPlayer(r,id,name,{bot=false,difficulty='medium',avatar='',now=Date.now()}={}) {
   if(r.players.length>=r.settings.capacity)fail('房间已满');
-  name=String(name??'').trim().slice(0,16);
-  if(!name)fail('请填写昵称');
+  name=validateName(name);avatar=validateAvatar(avatar);
   if(!['easy','medium','hard'].includes(difficulty))fail('电脑难度无效');
   const seats=new Set(r.players.map(p=>p.seat)); let seat=0;while(seats.has(seat))seat++;
-  const p={id,name,seat,bot,difficulty,stack:r.settings.buyIn,invested:r.settings.buyIn,rebuys:0,hole:[],bet:0,total:0,inHand:false,folded:false,acted:false,lastActBet:0,lastAction:'',lastSeen:now,sitOut:false,leaving:false,rebuyPending:false,firstActionHand:0,foldOpenStreak:0,allinOpenStreak:0,warning:null,kicked:false};
+  const p={id,name,avatar,seat,bot,difficulty,stack:r.settings.buyIn,invested:r.settings.buyIn,rebuys:0,hole:[],bet:0,total:0,inHand:false,folded:false,acted:false,lastActBet:0,lastAction:'',lastSeen:now,sitOut:false,leaving:false,rebuyPending:false,readyNext:false,handStartStack:r.settings.buyIn,firstActionHand:0,foldOpenStreak:0,allinOpenStreak:0,warning:null,kicked:false};
   r.players.push(p); if(!r.hostId&&!bot)r.hostId=id;
   log(r,`${name} 加入房间`);return p;
 }
-export function addSpectator(r,id,name,{now=Date.now()}={}) {
-  name=String(name??'').trim().slice(0,16);if(!name)fail('请填写昵称');
-  r.spectators??=[];const s={id,name,lastSeen:now};r.spectators.push(s);log(r,`${name} 进入观战`);return s;
+export function addSpectator(r,id,name,{avatar='',now=Date.now()}={}) {
+  name=validateName(name);avatar=validateAvatar(avatar);
+  r.spectators??=[];const s={id,name,avatar,lastSeen:now};r.spectators.push(s);log(r,`${name} 进入观战`);return s;
 }
 function pay(p,amount){const n=Math.min(p.stack,amount);p.stack-=n;p.bet+=n;p.total+=n;return n;}
 function turn(r,p,now){r.actorId=p?.id??null;r.deadline=p?now+(p.bot?1100:r.settings.turnSeconds*1000):null;}
 function draw(r,n){for(let i=0;i<n;i++)r.board.push(r.deck.pop());}
 export function startHand(r,now=Date.now(),fixedDeck) {
-  if(r.status==='playing')fail('本手尚未结束');
+  if(r.status==='playing'||r.status==='settlement')fail('本手尚未结束');
   r.players=r.players.filter(p=>!p.leaving);
   for(const p of r.players){
     if((p.rebuyPending||p.bot)&&p.stack===0){p.stack=r.settings.buyIn;p.invested+=r.settings.buyIn;p.rebuys++;}
@@ -87,8 +100,8 @@ export function startHand(r,now=Date.now(),fixedDeck) {
   }
   const eligible=p=>p.stack>0&&!p.sitOut;
   if(r.players.filter(eligible).length<2){r.status='waiting';r.nextAt=null;return false;}
-  r.status='playing';r.handNo++;r.board=[];r.burn=[];r.deck=fixedDeck?[...fixedDeck]:shuffle(deckCards(r.settings.deckType==='short'));r.results=[];r.pots=[];r.nextAt=null;r.street='preflop';r.currentBet=r.settings.bigBlind;r.minRaise=r.settings.bigBlind;
-  for(const p of r.players){p.inHand=eligible(p);p.folded=false;p.hole=[];p.bet=0;p.total=0;p.acted=false;p.lastActBet=0;p.lastAction=p.inHand?'':'等待入座';}
+  r.status='playing';r.handNo++;r.board=[];r.burn=[];r.deck=fixedDeck?[...fixedDeck]:shuffle(deckCards(r.settings.deckType==='short'));r.results=[];r.pots=[];r.handSummary=[];r.nextAt=null;r.settlementUntil=null;r.street='preflop';r.currentBet=r.settings.bigBlind;r.minRaise=r.settings.bigBlind;
+  for(const p of r.players){p.inHand=eligible(p);p.folded=false;p.hole=[];p.bet=0;p.total=0;p.acted=false;p.readyNext=false;p.handStartStack=p.stack;p.lastActBet=0;p.lastAction=p.inHand?'':'等待入座';}
   const dealer=after(r,r.dealer,eligible);r.dealer=dealer.seat;
   const sb=r.players.filter(eligible).length===2?dealer:after(r,dealer.seat,eligible);
   const bb=after(r,sb.seat,eligible);r.sb=sb.id;r.bb=bb.id;
@@ -170,8 +183,18 @@ export function settle(r,now=Date.now()) {
     r.pots.push({amount,winners:winners.map(p=>p.name),refund:false});
   }
   r.results=[...payouts].map(([id,amount])=>{const p=r.players.find(p=>p.id===id);return {id,name:p.name,amount,hand:contenders.length>1?evaluate([...p.hole,...r.board],r.settings.deckType==='short').name:'其他玩家弃牌'};});
-  r.showCards=contenders.length>1;r.status='showdown';r.actorId=null;r.deadline=null;r.nextAt=now+9000;
+  r.handSummary=r.players.filter(p=>p.inHand).map(p=>({id:p.id,name:p.name,avatar:p.avatar??'',delta:p.stack-(p.handStartStack??p.stack),stack:p.stack})).sort((a,b)=>b.delta-a.delta);
+  r.showCards=contenders.length>1;r.status='settlement';r.actorId=null;r.deadline=null;r.nextAt=null;r.settlementUntil=now+5000;
   for(const x of r.results)log(r,`${x.name} 赢得 ${x.amount} · ${x.hand}`);
+}
+export function readyNext(r,id,now=Date.now()){
+  if(r.status!=='showdown')fail('请等待结算画面结束');
+  const p=r.players.find(p=>p.id===id);if(!p||p.bot||p.leaving)fail('当前不能准备下一手');
+  p.readyNext=true;log(r,`${p.name} 已准备下一手`);
+  const required=r.players.filter(p=>!p.bot&&!p.leaving&&!p.sitOut&&now-p.lastSeen<60000);
+  const eligible=r.players.filter(p=>!p.sitOut&&(p.stack>0||p.bot||p.rebuyPending));
+  if(required.every(p=>p.readyNext)&&eligible.length>=2)return startHand(r,now);
+  return false;
 }
 export function rebuy(r,id) {
   const p=r.players.find(p=>p.id===id);if(!p)fail('座位不存在');
@@ -218,13 +241,11 @@ export function botDecision(r,p,random=Math.random) {
 export function tick(r,now=Date.now()) {
   let changed=false;
   if(r.status==='playing'&&r.deadline<=now){const p=r.players.find(p=>p.id===r.actorId);if(p){const d=p.bot?botDecision(r,p):{action:legalActions(r,p.id).canCheck?'check':'fold'};act(r,p.id,d.action,d.amount,now);changed=true;}}
-  if(r.status==='showdown'&&r.nextAt<=now){
-    for(const p of r.players)if(!p.bot&&now-p.lastSeen>60000)p.sitOut=true;
-    startHand(r,now);changed=true;
-  }
+  if(r.status==='settlement'&&r.settlementUntil<=now){r.status='showdown';r.settlementUntil=null;changed=true;}
   return changed;
 }
 export function publicView(r,id,now=Date.now(),isAdmin=false) {
   const spectator=(r.spectators??[]).find(s=>s.id===id);
-  return {id:r.id,settings:r.settings,hostId:r.hostId,status:r.status,handNo:r.handNo,dealer:r.dealer,sb:r.sb,bb:r.bb,board:r.board,street:r.street,currentBet:r.currentBet,actorId:r.actorId,deadline:r.deadline,nextAt:r.nextAt,results:r.results,pots:r.pots,logs:r.logs.slice(-30),revision:r.revision,serverNow:now,me:id,role:spectator?'spectator':'player',spectatorCount:(r.spectators??[]).filter(s=>now-s.lastSeen<15000).length,admin:isAdmin,adminActive:!!r.adminActive,legal:spectator?null:legalActions(r,id),pot:r.players.reduce((n,p)=>n+p.total,0),players:ordered(r).map(p=>({id:p.id,name:p.name,seat:p.seat,bot:p.bot,difficulty:p.difficulty,stack:p.stack,invested:p.invested,net:p.stack+p.total-p.invested,rebuys:p.rebuys,bet:p.bet,inHand:p.inHand,folded:p.folded,lastAction:p.lastAction,sitOut:p.sitOut,leaving:p.leaving,rebuyPending:p.rebuyPending,warning:p.warning,kicked:p.kicked,connected:p.bot||now-p.lastSeen<15000,hole:isAdmin||p.id===id||(r.status==='showdown'&&r.showCards&&p.inHand&&!p.folded)?p.hole:p.hole.map(()=>null)}))};
+  const required=r.players.filter(p=>!p.bot&&!p.leaving&&!p.sitOut&&now-p.lastSeen<60000);
+  return {id:r.id,settings:r.settings,hostId:r.hostId,status:r.status,handNo:r.handNo,dealer:r.dealer,sb:r.sb,bb:r.bb,board:r.board,street:r.street,currentBet:r.currentBet,actorId:r.actorId,deadline:r.deadline,nextAt:r.nextAt,settlementUntil:r.settlementUntil,handSummary:r.handSummary??[],readyCount:required.filter(p=>p.readyNext).length,requiredReady:required.length,results:r.results,pots:r.pots,logs:r.logs.slice(-30),revision:r.revision,serverNow:now,me:id,role:spectator?'spectator':'player',spectatorCount:(r.spectators??[]).filter(s=>now-s.lastSeen<15000).length,admin:isAdmin,adminActive:!!r.adminActive,legal:spectator?null:legalActions(r,id),pot:r.players.reduce((n,p)=>n+p.total,0),players:ordered(r).map(p=>({id:p.id,name:p.name,avatar:p.avatar??'',seat:p.seat,bot:p.bot,difficulty:p.difficulty,stack:p.stack,invested:p.invested,net:p.stack+p.total-p.invested,rebuys:p.rebuys,bet:p.bet,inHand:p.inHand,folded:p.folded,lastAction:p.lastAction,sitOut:p.sitOut,leaving:p.leaving,rebuyPending:p.rebuyPending,readyNext:p.readyNext,warning:p.warning,kicked:p.kicked,connected:p.bot||now-p.lastSeen<15000,hole:isAdmin||p.id===id||((r.status==='showdown'||r.status==='settlement')&&r.showCards&&p.inHand&&!p.folded)?p.hole:p.hole.map(()=>null)}))};
 }
